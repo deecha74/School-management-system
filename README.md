@@ -52,6 +52,8 @@ Secure CRUD operations with proper error handling
 
 Frontend Friendly:
 
+Future goal ( Integrating AI for chatbot and  for report  generation and student learning guide)
+
 API responses optimized for frontend consumption
 
 Supports nested relational data representation (e.g., teacher details in student info)
