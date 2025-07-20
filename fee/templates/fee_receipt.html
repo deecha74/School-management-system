@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fee Receipt</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .header {
+        text-align: center;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .bold {
+        font-weight: bold;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td,
+      th {
+        padding: 8px;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h2>School Name</h2>
+      <p><strong>Fee Receipt</strong></p>
+    </div>
+
+    <div class="section">
+      <p><span class="bold">Student:</span> {{ fee.student.full_name }}</p>
+      <p><span class="bold">Fee Type:</span> {{ fee.fee_type.name }}</p>
+      <p><span class="bold">Amount Paid:</span> ${{ fee.amount }}</p>
+      <p><span class="bold">Paid On:</span> {{ fee.paid_on }}</p>
+      <p><span class="bold">Receipt ID:</span> {{ fee.id }}</p>
+    </div>
+  </body>
+</html>

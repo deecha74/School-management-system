@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: schoolcms_db
+    restart: always
+    environment:
+      POSTGRES_DB: schoolcms
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Samata2068#
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:latest
+    container_name: schoolcms_redis
+    restart: always
+    ports:
+      - "6379:6379" 
+
+  wweb:
+    build:
+      context: .
+    container_name: schoolcms-web
+    command: >
+      sh -c "
+        python manage.py makemigrations &&
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        python manage.py clear_cache &&
+        python manage.py crontab add &&
+        gunicorn schoolcms.wsgi:application --bind 0.0.0.0:8000
+      "
+
+    volumes:
+      - .:/app   # ✅ Make sure this matches your Dockerfile WORKDIR (/app)
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      # Django settings via env vars
+      - DEBUG=True
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=schoolcms
+      - DB_USER=postgres
+      - DB_PASSWORD=Samata2068#
+      - DB_HOST=db   # ✅ NOT localhost!
+      - DB_PORT=5432
+      - REDIS_SERVER=redis:6379
+      - KHALTI_PUBLIC_KEY=6540c9d7c4664ed7a3d1eb3840dddd2d
+      - KHALTI_SECRET_KEY=b15a076f8d3d49a5aeb7782a5bfe28e9
+      - SANDBOX=True
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=587
+      - EMAIL_USE_TLS=True
+      - EMAIL_HOST_USER=your-email@gmail.com
+      - EMAIL_HOST_PASSWORD=your-app-password
+      - DEFAULT_FROM_EMAIL=your-email@gmail.com
+
+volumes:
+  db_data:
